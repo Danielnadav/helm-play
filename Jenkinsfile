@@ -46,9 +46,9 @@ pipeline {
                     script {
                         def valueFile
                         if (params.ENVIRONMENT == 'stg') {
-                            valueFile = 'values-stg.yaml'
+                            valueFile = 'values-stg.yml'
                         } else if (params.ENVIRONMENT == 'prd') {
-                            valueFile = 'values-prd.yaml'
+                            valueFile = 'Values.yaml'
                         } else {
                             error("Invalid environment selected!")
                         }
