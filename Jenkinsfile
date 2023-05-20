@@ -61,10 +61,11 @@ pipeline {
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade ${chartName} -f ${valueFile} --namespace default --reset-values ."
+                            sh "helm upgrade ${chartName} -f ${valueFile} --namespace default ."
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} --generate-name --namespace default ."
+                            def releaseName = sh(returnStdout: true, script: "helm install -f ${valueFile} --generate-name --namespace default . | awk '{print \$1}'")
+                            sh "helm upgrade ${releaseName.trim()} -f ${valueFile} --namespace default ."
                         }
                     }
                 }
