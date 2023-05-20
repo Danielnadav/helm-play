@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: "1.16.0"
+  pullPolicy: IfNotPresent
+
+
+env:
+  prod
+
+name:
+  prod
+  # values.yaml
+chart:
+  name: my-chart
