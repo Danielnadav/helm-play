@@ -45,23 +45,23 @@ pipeline {
                 container('helm') {
                     script {
                         def valueFile
-                        def chartName
+                        def default
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
-                            chartName = 'nginx-stg/my-chart-stg'
+                            default = 'nginx-stg/my-chart-stg'
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
-                            chartName = 'nginx-prd/my-chart-prd'
+                            default = 'nginx-prd/my-chart-prd'
                         } else {
                             error("Invalid environment selected!")
                         }
                         
                         // Check if the release already exists
-                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${chartName}")
+                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${default}")
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade ${chartName} -f ${valueFile} --namespace my-namespace ."
+                            sh "helm upgrade ${default} -f ${valueFile} --namespace my-namespace ."
                         } else {
                             // Release does not exist, perform helm install
                             sh "helm install -f ${valueFile} --generate-name --namespace my-namespace ."
