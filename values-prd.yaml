@@ -6,8 +6,8 @@ image:
   pullPolicy: IfNotPresent
 
 env:
-  prod
+  prodasas
 
 name:
-  prod1236asas1
+  prod1236asas1aqewqwe
     
