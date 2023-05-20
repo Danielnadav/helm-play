@@ -46,25 +46,28 @@ pipeline {
                     script {
                         def valueFile
                         def chartName
+                        def releaseName
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
                             chartName = 'nginx-stg'
+                            releaseName = 'my-nginx-stg' // Specify the release name for staging environment
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
                             chartName = 'nginx-prd'
+                            releaseName = 'my-nginx-prd' // Specify the release name for production environment
                         } else {
                             error("Invalid environment selected!")
                         }
                         
                         // Check if the release already exists
-                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${chartName}")
+                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${releaseName}")
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade -f ${valueFile} ${chartName}"
+                            sh "helm upgrade -f ${valueFile} ${releaseName} ${chartName}"
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} ${chartName}"
+                            sh "helm install -f ${valueFile} ${releaseName} ${chartName}"
                         }
                     }
                 }
