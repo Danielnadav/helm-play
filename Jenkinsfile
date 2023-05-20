@@ -61,7 +61,7 @@ pipeline {
                         }
                         
                         // Add the Helm repository
-                        sh "helm repo add nginx-prd <repository-url>"
+                        sh "helm repo add nginx-prd https://github.com/Danielnadav/helm-play.git"
                         
                         // Check if the release already exists
                         def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${releaseName}")
