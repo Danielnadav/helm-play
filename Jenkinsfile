@@ -54,7 +54,7 @@ pipeline {
                         }
                         
                         // Run helm install command with the selected value file
-                        sh "helm install -f ${valueFile} .  --generate-name"
+                        sh "helm install -f ${valueFile} ./  --generate-name"
                     }
                 }
             }
