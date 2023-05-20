@@ -36,7 +36,7 @@ pipeline {
             steps {
                 container('helm') {
                     // Run helm install command
-                    sh "helm template ./"
+                    sh "helm template . -f Values.yaml"
                 }
             }
         }
