@@ -46,16 +46,13 @@ pipeline {
                     script {
                         def valueFile
                         def releaseName
-                        def chartPath
                         
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
                             releaseName = 'my-chart-stg'
-                            chartPath = 'https://github.com/Danielnadav/helm-play.git/my-chart-0.1.0.tgz'
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
                             releaseName = 'my-chart-prd'
-                            chartPath = 'https://github.com/Danielnadav/helm-play.git/my-chart-0.1.0.tgz'
                         } else {
                             error("Invalid environment selected!")
                         }
@@ -65,10 +62,10 @@ pipeline {
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade -f ${valueFile} ${releaseName} ${chartPath}"
+                            sh "helm upgrade -f ${valueFile} ${releaseName} ."
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} --generate-name ${chartPath}"
+                            sh "helm install -f ${valueFile} --generate-name ."
                         }
                     }
                 }
