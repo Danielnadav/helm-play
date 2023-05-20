@@ -3,7 +3,6 @@ pipeline {
         kubernetes {
             // Configure the Kubernetes pod template
             // Customize the values based on your Kubernetes cluster and requirements
-
             yaml """
                 apiVersion: v1
                 kind: Pod
@@ -18,7 +17,7 @@ pipeline {
                     - /bin/sh
                     - -c
                     - |
-                      helm ls
+                      while true; do sleep 1; done
             """
         }
     }
@@ -27,13 +26,17 @@ pipeline {
         stage('Helm List') {
             steps {
                 container('helm') {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        // Run helm ls command and capture output
-                        script {
-                            def helmOutput = sh(returnStdout: true, script: "helm ls").trim()
-                            echo helmOutput
-                        }
-                    }
+                    // Run helm ls command
+                    sh "helm ls"
+                }
+            }
+        }
+        
+        stage('Helm Install') {
+            steps {
+                container('helm') {
+                    // Run helm install command
+                    sh "helm install nginx . "
                 }
             }
         }
