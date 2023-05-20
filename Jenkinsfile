@@ -61,10 +61,19 @@ pipeline {
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade -f ${valueFile} --install --wait --namespace my-namespace --generate-name ."
+                            def diffStatus = sh(
+                                returnStatus: true,
+                                script: "helm diff upgrade ${chartName} -f ${valueFile} --namespace my-namespace"
+                            )
+                            
+                            if (diffStatus == 0) {
+                                sh "helm upgrade ${chartName} -f ${valueFile} --namespace my-namespace"
+                            } else {
+                                echo "No changes detected in the values file. Skipping helm upgrade."
+                            }
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} --generate-name ."
+                            sh "helm install -f ${valueFile} --generate-name --namespace my-namespace ."
                         }
                     }
                 }
