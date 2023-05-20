@@ -17,7 +17,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: nginxdemos/hello
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: 
           ports:
             - name: http
               containerPort: 80
