@@ -48,7 +48,7 @@ pipeline {
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
                         } else if (params.ENVIRONMENT == 'prd') {
-                            valueFile = 'Values.yaml'
+                            valueFile = 'values-prd.yaml'
                         } else {
                             error("Invalid environment selected!")
                         }
