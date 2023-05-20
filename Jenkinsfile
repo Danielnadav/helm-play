@@ -61,10 +61,10 @@ pipeline {
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade -f ${valueFile} ${chartName} my-chart-0.1.0.tgz"
+                            sh "helm upgrade -f ${valueFile} ${chartName}"
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} ${chartName} my-chart-0.1.0.tgz"
+                            sh "helm install -f ${valueFile} ${chartName}"
                         }
                     }
                 }
