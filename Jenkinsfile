@@ -54,7 +54,7 @@ pipeline {
                         }
                         
                         // Run helm install command with the selected value file
-                        sh "helm install -f ${valueFile} Nginx"
+                        sh "helm install Nginx -f ${valueFile}"
                     }
                 }
             }
