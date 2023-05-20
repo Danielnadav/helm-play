@@ -40,21 +40,32 @@ pipeline {
             }
         }
         
-        stage('Helm Install') {
+        stage('Helm Install or Upgrade') {
             steps {
                 container('helm') {
                     script {
                         def valueFile
+                        def chartName
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
+                            chartName = 'my-chart-stg'
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
+                            chartName = 'my-chart-prd'
                         } else {
                             error("Invalid environment selected!")
                         }
                         
-                        // Run helm install command with the selected value file
-                        sh "helm install -f ${valueFile} ./  --generate-name"
+                        // Check if the release already exists
+                        def release = sh(returnStdout: true, script: "helm list -q --namespace my-namespace | grep ${chartName}").trim()
+                        
+                        if (release) {
+                            // Release already exists, perform helm upgrade
+                            sh "helm upgrade -f ${valueFile} ${chartName} my-chart-0.1.0.tgz"
+                        } else {
+                            // Release does not exist, perform helm install
+                            sh "helm install -f ${valueFile} ${chartName} my-chart-0.1.0.tgz"
+                        }
                     }
                 }
             }
