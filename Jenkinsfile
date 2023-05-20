@@ -57,9 +57,9 @@ pipeline {
                         }
                         
                         // Check if the release already exists
-                        def release = sh(returnStdout: true, script: "helm list -q --namespace my-namespace | grep ${chartName}").trim()
+                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${chartName}")
                         
-                        if (release) {
+                        if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
                             sh "helm upgrade -f ${valueFile} ${chartName} my-chart-0.1.0.tgz"
                         } else {
