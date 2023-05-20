@@ -48,10 +48,10 @@ pipeline {
                         def chartName
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
-                            chartName = 'my-chart-stg'
+                            chartName = 'nginxstg/my-chart-stg' // Modify with the correct chart name and repository
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
-                            chartName = 'my-chart-prd'
+                            chartName = 'nginxprd/my-chart-prd' // Modify with the correct chart name and repository
                         } else {
                             error("Invalid environment selected!")
                         }
@@ -61,10 +61,10 @@ pipeline {
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade nginx -f ${valueFile} ${chartName}"
+                            sh "helm upgrade -f ${valueFile} ${chartName} my-chart-0.1.0.tgz"
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install nginx -f ${valueFile} ${chartName}"
+                            sh "helm install -f ${valueFile} ${chartName} my-chart-0.1.0.tgz"
                         }
                     }
                 }
