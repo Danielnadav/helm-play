@@ -56,27 +56,24 @@ pipeline {
                             error("Invalid environment selected!")
                         }
                         
-                        // Create the namespace if it does not exist
-                        sh "kubectl create namespace my-namespace --dry-run=client -o yaml | kubectl apply -f -"
-                        
                         // Check if the release already exists
-                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${chartName}")
+                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace default | grep -q ${chartName}")
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
                             def diffStatus = sh(
                                 returnStatus: true,
-                                script: "helm diff upgrade ${chartName} -f ${valueFile} --namespace my-namespace"
+                                script: "helm diff upgrade ${chartName} -f ${valueFile} --namespace default"
                             )
                             
                             if (diffStatus == 0) {
-                                sh "helm upgrade ${chartName} -f ${valueFile} --namespace my-namespace"
+                                sh "helm upgrade ${chartName} -f ${valueFile} --namespace default"
                             } else {
                                 echo "No changes detected in the values file. Skipping helm upgrade."
                             }
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} --generate-name --namespace my-namespace ."
+                            sh "helm install -f ${valueFile} --generate-name --namespace default ."
                         }
                     }
                 }
