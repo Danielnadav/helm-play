@@ -64,7 +64,7 @@ pipeline {
                             sh "helm upgrade -f ${valueFile} ${chartName}"
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} ${chartName}"
+                            sh "helm install -f ${valueFile} . --generate-name"
                         }
                     }
                 }
