@@ -36,7 +36,7 @@ pipeline {
             steps {
                 container('helm') {
                     // Run helm install command
-                    sh "helm template . -f Values.yaml"
+                    sh "helm install nginxprd . -f Values.yaml"
                 }
             }
         }
