@@ -61,10 +61,10 @@ pipeline {
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade -f nginx ${valueFile} ${chartName}"
+                            sh "helm upgrade -f ${valueFile} --install --wait --namespace my-namespace --generate-name ."
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install nginx -f ${valueFile} . "
+                            sh "helm install -f ${valueFile} --generate-name ."
                         }
                     }
                 }
