@@ -22,6 +22,14 @@ pipeline {
         }
     }
     
+    parameters {
+        choice(
+            choices: ['stg', 'prd'],
+            description: 'Select the environment',
+            name: 'ENVIRONMENT'
+        )
+    }
+    
     stages {
         stage('Helm List') {
             steps {
@@ -35,8 +43,19 @@ pipeline {
         stage('Helm Install') {
             steps {
                 container('helm') {
-                    // Run helm install command
-                    sh "helm install nginxprd . -f Values.yaml"
+                    script {
+                        def valueFile
+                        if (params.ENVIRONMENT == 'stg') {
+                            valueFile = 'values-stg.yaml'
+                        } else if (params.ENVIRONMENT == 'prd') {
+                            valueFile = 'values-prd.yaml'
+                        } else {
+                            error("Invalid environment selected!")
+                        }
+                        
+                        // Run helm install command with the selected value file
+                        sh "helm install -f ${valueFile} Nginx"
+                    }
                 }
             }
         }
