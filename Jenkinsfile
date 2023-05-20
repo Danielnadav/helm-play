@@ -51,11 +51,11 @@ pipeline {
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
                             releaseName = 'my-chart-stg'
-                            chartPath = 'https://github.com/Danielnadav/helm-play.git'
+                            chartPath = 'https://github.com/Danielnadav/helm-play.git/my-chart-0.1.0.tgz'
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
                             releaseName = 'my-chart-prd'
-                            chartPath = 'https://github.com/Danielnadav/helm-play.git'
+                            chartPath = 'https://github.com/Danielnadav/helm-play.git/my-chart-0.1.0.tgz'
                         } else {
                             error("Invalid environment selected!")
                         }
