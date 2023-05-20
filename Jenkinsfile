@@ -46,32 +46,29 @@ pipeline {
                     script {
                         def valueFile
                         def releaseName
-                        def chartName
+                        def chartPath
                         
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
                             releaseName = 'my-chart-stg'
-                            chartName = 'nginx-stg/my-chart-prd'
+                            chartPath = 'https://github.com/Danielnadav/helm-play.git'
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
                             releaseName = 'my-chart-prd'
-                            chartName = 'nginx-prd/my-chart-prd'
+                            chartPath = 'https://github.com/Danielnadav/helm-play.git'
                         } else {
                             error("Invalid environment selected!")
                         }
-                        
-                        // Add the Helm repository
-                        sh "helm repo add https://github.com/Danielnadav/helm-play.git"
                         
                         // Check if the release already exists
                         def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${releaseName}")
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            sh "helm upgrade -f ${valueFile} ${releaseName} ${chartName}"
+                            sh "helm upgrade -f ${valueFile} ${releaseName} ${chartPath}"
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} --generate-name ${chartName}"
+                            sh "helm install -f ${valueFile} --generate-name ${chartPath}"
                         }
                     }
                 }
