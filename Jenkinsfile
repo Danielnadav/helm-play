@@ -48,10 +48,10 @@ pipeline {
                         def chartName
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
-                            chartName = 'nginx-stg/my-chart-stg'
+                            chartName = 'my-chart-stg'
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
-                            chartName = 'nginx-prd/my-chart-prd'
+                            chartName = 'my-chart-prd'
                         } else {
                             error("Invalid environment selected!")
                         }
