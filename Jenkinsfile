@@ -56,6 +56,9 @@ pipeline {
                             error("Invalid environment selected!")
                         }
                         
+                        // Create the namespace if it does not exist
+                        sh "kubectl create namespace my-namespace --dry-run=client -o yaml | kubectl apply -f -"
+                        
                         // Check if the release already exists
                         def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${chartName}")
                         
