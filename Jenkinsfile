@@ -51,7 +51,7 @@ pipeline {
                         if (params.ENVIRONMENT == 'stg') {
                             valueFile = 'values-stg.yaml'
                             releaseName = 'my-chart-stg'
-                            chartName = 'nginx-stg/my-chart-stg'
+                            chartName = 'nginx-stg/my-chart-prd'
                         } else if (params.ENVIRONMENT == 'prd') {
                             valueFile = 'values-prd.yaml'
                             releaseName = 'my-chart-prd'
@@ -59,6 +59,9 @@ pipeline {
                         } else {
                             error("Invalid environment selected!")
                         }
+                        
+                        // Add the Helm repository
+                        sh "helm repo add nginx-prd <repository-url>"
                         
                         // Check if the release already exists
                         def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${releaseName}")
