@@ -6,8 +6,8 @@ image:
   pullPolicy: IfNotPresent
 
 env:
-  stging
+  prod
 
 name:
-  staging
+  prod
     
