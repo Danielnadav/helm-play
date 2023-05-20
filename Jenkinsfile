@@ -57,23 +57,14 @@ pipeline {
                         }
                         
                         // Check if the release already exists
-                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace default | grep -q ${chartName}")
+                        def releaseCheck = sh(returnStatus: true, script: "helm list -q --namespace my-namespace | grep -q ${chartName}")
                         
                         if (releaseCheck == 0) {
                             // Release already exists, perform helm upgrade
-                            def diffStatus = sh(
-                                returnStatus: true,
-                                script: "helm diff upgrade ${chartName} -f ${valueFile} --namespace default"
-                            )
-                            
-                            if (diffStatus == 0) {
-                                sh "helm upgrade ${chartName} -f ${valueFile} --namespace default"
-                            } else {
-                                echo "No changes detected in the values file. Skipping helm upgrade."
-                            }
+                            sh "helm upgrade ${chartName} -f ${valueFile} --namespace my-namespace ."
                         } else {
                             // Release does not exist, perform helm install
-                            sh "helm install -f ${valueFile} --generate-name --namespace default ."
+                            sh "helm install -f ${valueFile} --generate-name --namespace my-namespace ."
                         }
                     }
                 }
