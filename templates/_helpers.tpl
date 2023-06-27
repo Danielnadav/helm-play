@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "webserver1.name" -}}
+{{- define "nginx1.name" -}}
 {{- default .Release.Name}}
 {{- end }}
 
